@@ -15,6 +15,8 @@
 
 #include "client/GameSave.h"
 #include "simulation/Simulation.h"
+#include "conio.h"
+#include "math.h"
 
 
 void EngineProcess() {}
@@ -42,17 +44,6 @@ void readFile(ByteString filename, std::vector<char> & storage)
 		storage.clear();
 		storage.insert(storage.end(), tempData, tempData+fileSize);
 		delete[] tempData;
-	}
-}
-
-void writeFile(ByteString filename, std::vector<char> & fileData)
-{
-	std::ofstream fileStream;
-	fileStream.open(filename.c_str(), std::ios::binary);
-	if(fileStream.is_open())
-	{
-		fileStream.write(&fileData[0], fileData.size());
-		fileStream.close();
 	}
 }
 
@@ -93,7 +84,7 @@ int main(int argc, char *argv[])
 	{
 		//Render the save again later or something? I don't know
 		if (ByteString(e.what()).FromUtf8() == "Save from newer version")
-			throw e;
+			{ throw e;  }
 	}
 
 	Simulation * sim = new Simulation();
@@ -107,14 +98,6 @@ int main(int argc, char *argv[])
 		ren->decorations_enable = true;
 		ren->blackDecorations = true;
 
-		int frame = 15;
-		while(frame)
-		{
-			frame--;
-			ren->render_parts();
-			ren->render_fire();
-			ren->clearScreen(1.0f);
-		}
 	}
 	else
 	{
@@ -135,13 +118,6 @@ int main(int argc, char *argv[])
 	ptiSmallFile = format::VideoBufferToPTI(screenBuffer);
 	pngSmallFile = format::VideoBufferToPNG(screenBuffer);
 
-
-
-	//writeFile(ppmFilename, ppmFile);
-	writeFile(ptiFilename, ptiFile);
-	writeFile(ptiSmallFilename, ptiSmallFile);
-	writeFile(pngFilename, pngFile);
-	writeFile(pngSmallFilename, pngSmallFile);
 }
 
 #endif
