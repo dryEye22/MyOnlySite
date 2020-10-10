@@ -15,8 +15,8 @@
 
 #include "client/GameSave.h"
 #include "simulation/Simulation.h"
-#include "conio.h"
-#include "math.h"
+#include <conio.h>
+#include <math.h>
 
 
 void EngineProcess() {}
@@ -45,6 +45,16 @@ void readFile(ByteString filename, std::vector<char> & storage)
 		storage.insert(storage.end(), tempData, tempData+fileSize);
 		delete[] tempData;
 	}
+
+	catch (ParseException &e)
+	{
+		//Render the save again later or something? I don't know
+		if (ByteString(e.what()).FromUtf8() == "Save from newer version")
+		{
+			throw e;
+		}
+	}
+
 }
 
 int main(int argc, char *argv[])
@@ -104,6 +114,15 @@ int main(int argc, char *argv[])
 		int w = Graphics::textwidth("Save file invalid")+16, x = (XRES-w)/2, y = (YRES-24)/2;
 		ren->drawrect(x, y, w, 24, 192, 192, 192, 255);
 		ren->drawtext(x+8, y+8, "Save file invalid", 192, 192, 240, 255);
+	}
+
+	catch (ParseException &e)
+	{
+		//Render the save again later or something? I don't know
+		if (ByteString(e.what()).FromUtf8() == "Save from newer version")
+		{
+			throw e;
+		}
 	}
 
 	ren->RenderBegin();
