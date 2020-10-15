@@ -48,10 +48,7 @@ SmallKBinomialGenerator::SmallKBinomialGenerator(unsigned int n, float p, unsign
 	delete[] pdf;
 }
 
-SmallKBinomialGenerator::~SmallKBinomialGenerator()
-{
-	delete[] cdf;
-}
+//deleted a function
 
 unsigned int SmallKBinomialGenerator::calc(float randFloat)
 {
